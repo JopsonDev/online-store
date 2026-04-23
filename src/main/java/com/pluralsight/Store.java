@@ -21,7 +21,6 @@ public class Store {
 
         // Load inventory from the data file (pipe-delimited: id|name|price)
         loadInventory("products.csv", inventory);
-
         // Main menu loop
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -67,15 +66,15 @@ public class Store {
             while ((line = reader.readLine()) != null){
                 String[] parts = line.split("\\|");
 
-                int id = Integer.parseInt(parts[0]);
+                String id = parts[0];
                 String name = parts[1];
                 double price = Double.parseDouble(parts[2]);
 
                 Product item = new Product(id, name, price);
                 inventory.add(item);
-                reader.close();
             }
-        }catch (Exception a){
+            reader.close();
+        } catch (Exception a){
             System.out.println("Sorry something went wrong");
         }
     }
