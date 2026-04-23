@@ -49,17 +49,7 @@ public class Store {
         scanner.close();
     }
 
-    /**
-     * Reads product data from a file and populates the inventory list.
-     * File format (pipe-delimited):
-     * id|name|price
-     * <p>
-     * Example line:
-     * A17|Wireless Mouse|19.99
-     */
     public static void loadInventory(String fileName, ArrayList<Product> inventory) {
-        // TODO: read each line, split on "|",
-        //       create a Product object, and add it to the inventory list
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
@@ -88,7 +78,36 @@ public class Store {
                                        Scanner scanner) {
         // TODO: show each product (id, name, price),
         //       prompt for an id, find that product, add to cart
+        for (Product item : inventory) {
+            System.out.println(item);
+        }
+        System.out.print("To add to cart please enter ID or x to exit: ");
+        String choice = scanner.nextLine();
+        boolean isDone = false;
+        while (!isDone) {
+            if (!choice.equalsIgnoreCase("x")) {
+                for (Product item : inventory) {
+                    if (item.getId().equalsIgnoreCase(choice)) {
+                        //add item to cart.
+                        System.out.println("1");
+                    } else {
+                        System.out.println("No matching Items");
+                    }
+                    System.out.print("Add More? Y or N: ");
+                    String maybe = scanner.nextLine();
+                    if (maybe.equalsIgnoreCase("n")) {
+                        isDone = true;
+                    } else {
+                        System.out.println("No matching Items");
+                    }
+                }
+            } else {
+                isDone = true;
+            }
+        }
     }
+
+
 
     /**
      * Shows the contents of the cart, calculates the total,
