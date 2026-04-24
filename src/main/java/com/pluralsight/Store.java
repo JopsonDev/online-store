@@ -119,7 +119,7 @@ public class Store {
             total += cart.get(i).getPrice();
 
             }
-        System.out.printf("Total: %.2f", total);
+        System.out.printf("Total: %.2f%n", total);
         System.out.print("Would you like to check out? y for yes: n for no -> ");
         String choice = scanner.nextLine();
         if (choice.equalsIgnoreCase("y")){
@@ -138,10 +138,10 @@ public class Store {
                                 double totalAmount,
                                 Scanner scanner) {
         // TODO: implement steps listed above
+        while(totalAmount > 0) {
         System.out.print("please provide payment amount: ");
         Double payment = scanner.nextDouble();
         double change = payment - totalAmount;
-        while(totalAmount > 0) {
             if (change < 0) {
                 System.out.println("Not enough please try again");
             } else {
@@ -149,7 +149,7 @@ public class Store {
                 for (int i = 0; i < cart.size(); i++) {
                     System.out.println(cart.get(i));
                 }
-                System.out.println("$" + totalAmount + "\n-$" + payment + "\nChange: $" + change + "\nBalance Due: $0");
+                System.out.printf("$%.2f%n-$%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
                 totalAmount = 0;
             }
         }
