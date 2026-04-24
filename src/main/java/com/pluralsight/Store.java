@@ -149,10 +149,11 @@ public class Store {
                 for (int i = 0; i < cart.size(); i++) {
                     System.out.println(cart.get(i));
                 }
-                System.out.printf("$%.2f%n-$%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
+                System.out.printf("Payment: $%.2f%nTotal Due: $%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
                 totalAmount = 0;
             }
         }
+        cart.clear();
     }
 
     /**
