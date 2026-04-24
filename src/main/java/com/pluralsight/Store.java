@@ -3,7 +3,6 @@ package com.pluralsight;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -71,13 +70,15 @@ public class Store {
             cart.add(item);
         }
     }
-    public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart, String input) {
+    public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
         Product item = null;
         boolean isDone = false;
+        System.out.print("Search Items/Add Items (Y/N): ");
+        String input = scanner.nextLine();
 
         while(!isDone) {
             if (input.equalsIgnoreCase("Y")) {
-                System.out.print("X to exit, Enter Id: ");
+                System.out.print("Enter Product ID to view/add, or X to return:");
                 String id = scanner.nextLine();
                 if(!id.equalsIgnoreCase("X")) {
                     item = findProductById(id, inventory);
@@ -93,20 +94,12 @@ public class Store {
         }
     }
     public static void displayProducts(ArrayList<Product> inventory, ArrayList<Product> cart, Scanner scanner) {
-        for(Product item: inventory){
+        for (Product item : inventory) {
             System.out.println(item);
         }
         System.out.println("=====================================================================");
-        System.out.print("Search Items (Y/N): ");
-        String input = scanner.nextLine();
-        lookingAtProducts(inventory, scanner, cart, input);
-
-        System.out.println("=====================================================================");
-
-        System.out.print("Add Item to Cart (Y/N); ");
-        String choice = scanner.nextLine();
-        lookingAtProducts(inventory, scanner, cart, choice);
-        }
+        lookingAtProducts(inventory, scanner, cart);
+    }
 
     public static void displayCart(ArrayList<Product> cart, Scanner scanner) {
         double total = 0;
@@ -125,21 +118,29 @@ public class Store {
 
     public static void checkOut(ArrayList<Product> cart, double totalAmount, Scanner scanner) {
         while(totalAmount > 0) {
-        System.out.print("please provide payment amount: ");
-        Double payment = scanner.nextDouble();
-        scanner.nextLine();
-
-        double change = payment - totalAmount;
-            if (change < 0) {
-                System.out.println("Not enough please try again");
-            } else {
-                System.out.println("****RECEIPT****");
-                for (int i = 0; i < cart.size(); i++) {
-                    System.out.println(cart.get(i));
+            double payment;
+            while (true) {
+                    System.out.print("please provide payment amount: ");
+                    if (scanner.hasNextDouble()) {
+                        payment = scanner.nextDouble();
+                        scanner.nextLine();
+                        break;
+                    } else {
+                        System.out.println("Invalid input. Please enter a number.");
+                        scanner.nextLine();
+                    }
                 }
-                System.out.printf("Payment: $%.2f%nTotal Due: $%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
-                totalAmount = 0;
-            }
+            double change = payment - totalAmount;
+                if (change < 0) {
+                    System.out.println("Not enough please try again");
+                } else {
+                    System.out.println("****RECEIPT****");
+                    for (int i = 0; i < cart.size(); i++) {
+                        System.out.println(cart.get(i));
+                    }
+                    System.out.printf("Payment: $%.2f%nTotal Due: $%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
+                    totalAmount = 0;
+                }
         }
         cart.clear();
     }
@@ -149,6 +150,7 @@ public class Store {
         for (int i = 0; i < inventory.size(); i++) {
             if (id.equalsIgnoreCase(inventory.get(i).getId())) {
                 item = inventory.get(i);
+                break;
             }
         }
         if (item == null) {
