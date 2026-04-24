@@ -63,6 +63,13 @@ public class Store {
             System.out.println("Sorry something went wrong");
         }
     }
+    public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart){
+        System.out.println("Add to cart (Y/N)");
+        String input = scanner.nextLine();
+        if (input.equalsIgnoreCase("Y")){
+            cart.add(item);
+        }
+    }
     public static void searchProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
         Product item = null;
         boolean isDone = false;
@@ -77,6 +84,7 @@ public class Store {
                     item = findProductById(id, inventory);
                     if (item != null) {
                         System.out.println(item);
+                        addToCart(item, scanner, cart);
                     }
                 }else {
                     isDone = true;
