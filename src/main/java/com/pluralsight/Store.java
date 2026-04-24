@@ -53,7 +53,7 @@ public class Store {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
-            while ((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|");
 
                 String id = parts[0];
@@ -64,7 +64,7 @@ public class Store {
                 inventory.add(item);
             }
             reader.close();
-        } catch (Exception a){
+        } catch (Exception a) {
             System.out.println("Sorry something went wrong");
         }
     }
@@ -78,35 +78,29 @@ public class Store {
                                        Scanner scanner) {
         // TODO: show each product (id, name, price),
         //       prompt for an id, find that product, add to cart
-        for (Product item : inventory) {
+        for(Product item: inventory){
             System.out.println(item);
         }
-        System.out.print("To add to cart please enter ID or x to exit: ");
+        System.out.print("Would you like to add an item to your cart? Y for yes: N for no -> ");
         String choice = scanner.nextLine();
         boolean isDone = false;
-        while (!isDone) {
-            if (!choice.equalsIgnoreCase("x")) {
-                for (Product item : inventory) {
-                    if (item.getId().equalsIgnoreCase(choice)) {
-                        //add item to cart.
-                        System.out.println("1");
-                    } else {
-                        System.out.println("No matching Items");
-                    }
-                    System.out.print("Add More? Y or N: ");
-                    String maybe = scanner.nextLine();
-                    if (maybe.equalsIgnoreCase("n")) {
-                        isDone = true;
-                    } else {
-                        System.out.println("No matching Items");
-                    }
+        if (choice.equalsIgnoreCase("Y")) {
+            while (!isDone) {
+                System.out.print("Please enter Item ID: ");
+                String userID = scanner.nextLine();
+                Product foundProduct = findProductById(userID, inventory);
+                if (foundProduct != null){
+                    cart.add(foundProduct);
+                    System.out.print("Fantastic! Would you like anything else? Y or N -> ");
+                    String more = scanner.nextLine();
+                if (more.equalsIgnoreCase("N")) {
+                    isDone = true;
                 }
-            } else {
-                isDone = true;
+                    System.out.println(cart);
+                }
             }
         }
     }
-
 
 
     /**
@@ -119,7 +113,19 @@ public class Store {
         //   • compute the total cost
         //   • ask the user whether to check out (C) or return (X)
         //   • if C, call checkOut(cart, totalAmount, scanner)
-    }
+        double total = 0;
+        for(int i = 0; i < cart.size(); i++){
+            System.out.println(cart.get(i));
+            total += cart.get(i).getPrice();
+
+            }
+        System.out.printf("Total: %.2f", total);
+        System.out.print("Would you like to check out? y for yes: n for no -> ");
+        String choice = scanner.nextLine();
+        if (choice.equalsIgnoreCase("y")){
+            checkOut(cart, total, scanner);
+        }
+        }
 
     /**
      * Handles the checkout process:
@@ -132,6 +138,21 @@ public class Store {
                                 double totalAmount,
                                 Scanner scanner) {
         // TODO: implement steps listed above
+        System.out.print("please provide payment amount: ");
+        Double payment = scanner.nextDouble();
+        double change = payment - totalAmount;
+        while(totalAmount > 0) {
+            if (change < 0) {
+                System.out.println("Not enough please try again");
+            } else {
+                System.out.println("****RECEIPT****");
+                for (int i = 0; i < cart.size(); i++) {
+                    System.out.println(cart.get(i));
+                }
+                System.out.println("$" + totalAmount + "\n-$" + payment + "\nChange: $" + change + "\nBalance Due: $0");
+                totalAmount = 0;
+            }
+        }
     }
 
     /**
@@ -141,8 +162,20 @@ public class Store {
      */
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         // TODO: loop over the list and compare ids
-        return null;
+        Product item = null;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (id.equalsIgnoreCase(inventory.get(i).getId())) {
+                item = inventory.get(i);
+            }
+        }
+        if (item == null) {
+            System.out.println("No Matching Items Please Try Again");
+        }
+        return item;
     }
 }
+    
+        
+    
 
 
