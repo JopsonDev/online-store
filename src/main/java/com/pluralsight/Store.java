@@ -63,22 +63,22 @@ public class Store {
             System.out.println("Sorry something went wrong");
         }
     }
-    public static void searchProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart){
-        System.out.print("Would you like check inventory for a product? C to continue: X to return -> ");
-        String choice = scanner.nextLine();
-        if(choice.equalsIgnoreCase("C")) {
-            Product item = null;
-            while (item == null) {
-                System.out.print("Enter ID: ");
+    public static void searchProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
+        Product item = null;
+        boolean isDone = false;
+        while(!isDone) {
+            System.out.println("Search Items? (Y/N): ");
+            String input = scanner.nextLine();
+
+            if (input.equalsIgnoreCase("Y")) {
+                System.out.println("Enter Id: ");
                 String id = scanner.nextLine();
                 item = findProductById(id, inventory);
-            }
-            System.out.println(item);
-            System.out.println("=====================================================================");
-            System.out.println("Would you like to add that to your cart? C to continue: X to return ->");
-            String add = scanner.nextLine();
-            if (add.equalsIgnoreCase("C")){
-                cart.add(item);
+                if (item != null) {
+                    System.out.println(item);
+                }
+            } else {
+                isDone = true;
             }
         }
     }
