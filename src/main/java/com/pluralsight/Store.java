@@ -64,18 +64,17 @@ public class Store {
         }
     }
     public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart){
+        System.out.println(item);
         System.out.println("Add to cart (Y/N)");
         String input = scanner.nextLine();
         if (input.equalsIgnoreCase("Y")){
             cart.add(item);
         }
     }
-    public static void searchProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
+    public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart, String input) {
         Product item = null;
         boolean isDone = false;
 
-        System.out.println("Search Items? (Y/N): ");
-        String input = scanner.nextLine();
         while(!isDone) {
             if (input.equalsIgnoreCase("Y")) {
                 System.out.print("X to exit, Enter Id: ");
@@ -83,7 +82,6 @@ public class Store {
                 if(!id.equalsIgnoreCase("X")) {
                     item = findProductById(id, inventory);
                     if (item != null) {
-                        System.out.println(item);
                         addToCart(item, scanner, cart);
                     }
                 }else {
@@ -99,30 +97,16 @@ public class Store {
             System.out.println(item);
         }
         System.out.println("=====================================================================");
-
-        searchProducts(inventory, scanner, cart);
+        System.out.print("Search Items (Y/N): ");
+        String input = scanner.nextLine();
+        lookingAtProducts(inventory, scanner, cart, input);
 
         System.out.println("=====================================================================");
 
-        System.out.print("Would you like to add an item to your cart? C to continue: X to return to menu -> ");
+        System.out.print("Add Item to Cart (Y/N); ");
         String choice = scanner.nextLine();
-        boolean isDone = false;
-        if (choice.equalsIgnoreCase("C")) {
-            while (!isDone) {
-                System.out.print("Please enter Item ID: ");
-                String userID = scanner.nextLine();
-                Product foundProduct = findProductById(userID, inventory);
-                if (foundProduct != null){
-                    cart.add(foundProduct);
-                    System.out.print("Fantastic! Would you like anything else? C or X to return to menu -> ");
-                    String more = scanner.nextLine();
-                if (more.equalsIgnoreCase("X")) {
-                    isDone = true;
-                }
-                }
-            }
+        lookingAtProducts(inventory, scanner, cart, choice);
         }
-    }
 
     public static void displayCart(ArrayList<Product> cart, Scanner scanner) {
         double total = 0;
