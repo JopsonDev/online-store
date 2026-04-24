@@ -66,16 +66,20 @@ public class Store {
     public static void searchProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
         Product item = null;
         boolean isDone = false;
-        while(!isDone) {
-            System.out.println("Search Items? (Y/N): ");
-            String input = scanner.nextLine();
 
+        System.out.println("Search Items? (Y/N): ");
+        String input = scanner.nextLine();
+        while(!isDone) {
             if (input.equalsIgnoreCase("Y")) {
-                System.out.println("Enter Id: ");
+                System.out.print("X to exit, Enter Id: ");
                 String id = scanner.nextLine();
-                item = findProductById(id, inventory);
-                if (item != null) {
-                    System.out.println(item);
+                if(!id.equalsIgnoreCase("X")) {
+                    item = findProductById(id, inventory);
+                    if (item != null) {
+                        System.out.println(item);
+                    }
+                }else {
+                    isDone = true;
                 }
             } else {
                 isDone = true;
