@@ -34,11 +34,8 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return "Receipt{" +
-                "cart=" + cart +
-                ", total=" + total +
-                ", payment=" + payment +
-                ", change=" + change +
-                '}';
+        return "****RECEIPT****\n" + cart + "\nCart Total : $" + total + "\nTax        : $0:00\n-----------------------------\nTotal Due  : $" + total + "\n" +
+                "Payment    : $" + payment + "\nChange     : $" + change + "\n=============================\nBalance    : $0.00" +
+                "\nThank you for your purchase!";
     }
 }

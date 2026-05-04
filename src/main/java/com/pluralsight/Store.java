@@ -61,19 +61,23 @@ public class Store {
             System.out.println("Sorry something went wrong");
         }
     }
+
     public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart){
-        System.out.println(item);
+        System.out.println(item + "\n");
         System.out.println("Add to cart (Y/N)");
+        final double OG_PRICE = item.getPrice();
         String input = scanner.nextLine();
         if (input.equalsIgnoreCase("Y")){
             if (item.getQuantity() >= 1) {
                 item.setQuantity(item.getQuantity() + 1);
+                item.setPrice(OG_PRICE * item.getQuantity());
             } else {
                 item.setQuantity(item.getQuantity() + 1);
                 cart.add(item);
             }
         }
     }
+
     public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
         Product item = null;
         boolean isDone = false;
@@ -97,6 +101,7 @@ public class Store {
             }
         }
     }
+
     public static void displayProducts(ArrayList<Product> inventory, ArrayList<Product> cart, Scanner scanner) {
         for (Product item : inventory) {
             System.out.println(item);
@@ -107,11 +112,11 @@ public class Store {
 
     public static void displayCart(ArrayList<Product> cart, Scanner scanner) {
         double total = 0;
-        for(int i = 0; i < cart.size(); i++){
-            System.out.println(cart.get(i));
-            total += cart.get(i).getPrice();
+        for (Product product : cart) {
+            System.out.println(product);
+            total += product.getPrice();
 
-            }
+        }
         System.out.printf("Total: %.2f%n", total);
         System.out.print("Would you like to check out? C to continue: X to return -> ");
         String choice = scanner.nextLine();
@@ -138,14 +143,10 @@ public class Store {
                 if (change < 0) {
                     System.out.println("Not enough please try again");
                 } else {
-                    System.out.println("****RECEIPT****");
-                    for (int i = 0; i < cart.size(); i++) {
-                        System.out.println(cart.get(i));
-                    }
                     Receipt receipt = new Receipt(cart, totalAmount, payment, change);
                     System.out.print(receipt);
                     try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv"));
+                        BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true));
                         writer.write(String.valueOf(receipt));
                         writer.close();
                     } catch (Exception e){
@@ -159,9 +160,9 @@ public class Store {
 
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         Product item = null;
-        for (int i = 0; i < inventory.size(); i++) {
-            if (id.equalsIgnoreCase(inventory.get(i).getId())) {
-                item = inventory.get(i);
+        for (Product product : inventory) {
+            if (id.equalsIgnoreCase(product.getId())) {
+                item = product;
                 break;
             }
         }
