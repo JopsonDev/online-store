@@ -69,10 +69,9 @@ public class Store {
         if (input.equalsIgnoreCase("Y")){
             if (item.getQuantity() >= 1) {
                 item.setQuantity(item.getQuantity() + 1);
-                item.setPrice((item.getPrice() / (item.getQuantity() - 1) * item.getQuantity()));
             } else {
-                item.setQuantity(item.getQuantity() + 1);
                 cart.add(item);
+                item.setQuantity(1);
             }
         }
     }
@@ -113,7 +112,9 @@ public class Store {
         double total = 0;
         for (Product product : cart) {
             System.out.println(product);
+            product.setPrice((product.getPrice() * product.getQuantity()));
             total += product.getPrice();
+
 
         }
         System.out.printf("Total: %.2f%n", total);
