@@ -54,7 +54,7 @@ public class Store {
                 String name = parts[1];
                 double price = Double.parseDouble(parts[2]);
 
-                Product item = new Product(id, name, price);
+                Product item = new Product(id, name, price, 0);
                 inventory.add(item);
             }
             reader.close();
@@ -67,7 +67,12 @@ public class Store {
         System.out.println("Add to cart (Y/N)");
         String input = scanner.nextLine();
         if (input.equalsIgnoreCase("Y")){
-            cart.add(item);
+            if (item.getQuantity() >= 1) {
+                item.setQuantity(item.getQuantity() + 1);
+            } else {
+                item.setQuantity(item.getQuantity() + 1);
+                cart.add(item);
+            }
         }
     }
     public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
