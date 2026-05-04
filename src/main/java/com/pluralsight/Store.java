@@ -65,12 +65,11 @@ public class Store {
     public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart){
         System.out.println(item + "\n");
         System.out.println("Add to cart (Y/N)");
-        final double OG_PRICE = item.getPrice();
         String input = scanner.nextLine();
         if (input.equalsIgnoreCase("Y")){
             if (item.getQuantity() >= 1) {
                 item.setQuantity(item.getQuantity() + 1);
-                item.setPrice(OG_PRICE * item.getQuantity());
+                item.setPrice((item.getPrice() / (item.getQuantity() - 1) * item.getQuantity()));
             } else {
                 item.setQuantity(item.getQuantity() + 1);
                 cart.add(item);

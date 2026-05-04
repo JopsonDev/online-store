@@ -41,8 +41,8 @@ public class Product {
 
     @Override
     public String toString() {
-        return  "Quantity: " + quantity + ") Id: " + id +
+        return  String.format("Quantity: " + quantity + ") Id: " + id +
                 ", Name: " + name + '\'' +
-                ", Price: " + price;
+                ", Price: $%,.2f ", price);
     }
 }
