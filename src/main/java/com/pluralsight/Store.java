@@ -1,8 +1,7 @@
 
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -83,7 +82,7 @@ public class Store {
 
         while(!isDone) {
             if (input.equalsIgnoreCase("Y")) {
-                System.out.print("Enter Product ID to view/add, or X to return:");
+                System.out.print("Enter Product ID to view/add, or X to return: ");
                 String id = scanner.nextLine();
                 if(!id.equalsIgnoreCase("X")) {
                     item = findProductById(id, inventory);
@@ -143,7 +142,15 @@ public class Store {
                     for (int i = 0; i < cart.size(); i++) {
                         System.out.println(cart.get(i));
                     }
-                    System.out.printf("Payment: $%.2f%nTotal Due: $%.2f%nChange: $%.2f%nBalance Due = $0", payment, totalAmount, change);
+                    Receipt receipt = new Receipt(cart, totalAmount, payment, change);
+                    System.out.print(receipt);
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv"));
+                        writer.write(String.valueOf(receipt));
+                        writer.close();
+                    } catch (Exception e){
+                        System.out.println("failed to add transaction");
+                    }
                     totalAmount = 0;
                 }
         }
