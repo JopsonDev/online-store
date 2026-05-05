@@ -2,9 +2,7 @@
 package com.pluralsight;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -38,7 +36,8 @@ public class Store {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> displayProducts(inventory, cart, scanner); //shows store inventory and allows users to add items to cart
+                case 1 ->
+                        displayProducts(inventory, cart, scanner); //shows store inventory and allows users to add items to cart
                 case 2 -> displayCart(cart, scanner); //displays contents of cart and gives user option to check out
                 case 3 -> employeePinCheck(scanner); //check all transaction receipt saved
                 case 4 -> System.out.println("Thank you for shopping with us!");
@@ -68,11 +67,11 @@ public class Store {
         }
     }
 
-    public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart){
+    public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart) {
         System.out.println(item + "\n");
         System.out.println("Add to cart (Y/N)");
         String input = scanner.nextLine();
-        if (input.equalsIgnoreCase("Y")){
+        if (input.equalsIgnoreCase("Y")) {
             if (item.getQuantity() >= 1) {
                 item.setQuantity(item.getQuantity() + 1);
             } else {
@@ -88,16 +87,16 @@ public class Store {
         System.out.print("Search Items/Add Items (Y/N): ");
         String input = scanner.nextLine();
 
-        while(!isDone) {
+        while (!isDone) {
             if (input.equalsIgnoreCase("Y")) {
                 System.out.print("Enter Product ID to view/add, or X to return: ");
                 String id = scanner.nextLine();
-                if(!id.equalsIgnoreCase("X")) {
+                if (!id.equalsIgnoreCase("X")) {
                     item = findProductById(id, inventory);
                     if (item != null) {
                         addToCart(item, scanner, cart);
                     }
-                }else {
+                } else {
                     isDone = true;
                 }
             } else {
@@ -126,12 +125,12 @@ public class Store {
         System.out.printf("Total: %.2f%n", total);
         System.out.print("Would you like to check out? C to continue: X to return -> ");
         String choice = scanner.nextLine();
-        if (choice.equalsIgnoreCase("C")){
+        if (choice.equalsIgnoreCase("C")) {
             checkOut(cart, total, scanner);
         }
     }
 
-    public static double collectingPayment(Scanner scanner, double totalAmount){
+    public static double collectingPayment(Scanner scanner, double totalAmount) {
         double payment;
         while (true) {
             System.out.printf("Total Due: %,.2f%n", totalAmount);
@@ -148,29 +147,34 @@ public class Store {
         return payment;
     }
 
-    public static void receiptBuilder(ArrayList<Product> cart, double totalAmount, double payment, double change){
+    public static void receiptBuilder(ArrayList<Product> cart, double totalAmount, double payment, double change) {
         Receipt receipt = new Receipt(cart, totalAmount, payment, change);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         String dateTime = LocalDateTime.now().format(formatter);
+        File folder = new File("Receipts");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        File receiptFile = new File("Receipts", dateTime + ".csv");
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true))) {
+        try {
+            BufferedWriter writeSeparate = new BufferedWriter(new FileWriter(receiptFile, true));
 
-            writer.write("\n\n****RECEIPT****\n");
-            writer.write(dateTime + "\n");
+            writeSeparate.write("****RECEIPT****\n");
+            writeSeparate.write(dateTime + "\n");
 
             System.out.println("****RECEIPT****");
             System.out.println(dateTime);
 
             for (Product product : cart) {
-                writer.write(product.toString());
-                writer.newLine();
+                writeSeparate.write(product.toString());
+                writeSeparate.newLine();
 
                 System.out.println(product);
             }
-
-            writer.write(receipt.toString());
-            writer.newLine();
-            writer.close();
+            writeSeparate.write(receipt.toString());
+            writeSeparate.newLine();
+            writeSeparate.close();
 
             System.out.println(receipt);
 
@@ -213,30 +217,50 @@ public class Store {
         return item;
     }
 
-    public static void loadReceipts(){
+    public static void reader(String fileName) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("Transactions.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
             reader.close();
         } catch (Exception a) {
-            System.out.println("Sorry something went wrong");
-            }
+            System.out.println("No matching files");
+        }
     }
 
-    public static void employeePinCheck(Scanner scanner){
+    public static void loadReceipts(Scanner scanner) {
+        while (true) {
+            File folder = new File("Receipts");
+            File[] files = folder.listFiles();
+
+            if (files != null) {
+                for (File file : files) {
+                    System.out.println(file.getName());
+                }
+                System.out.println("Please enter a file to view(yyyy-MM-dd_hh-mm-ss.csv) or X to return: ");
+                String input = scanner.nextLine();
+                if (!input.equalsIgnoreCase("X")) {
+                    reader(input);
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+    public static void employeePinCheck(Scanner scanner) {
         System.out.print("Please enter employee pin(Raymond its 1234): ");
         int input = scanner.nextInt();
         scanner.nextLine();
-        if(input == 1234){
-            loadReceipts();
+        if (input == 1234) {
+            loadReceipts(scanner);
         } else {
             System.out.println("Invalid pin");
         }
     }
 }
+
     
         
     
