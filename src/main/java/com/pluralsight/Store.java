@@ -2,6 +2,10 @@
 package com.pluralsight;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -131,40 +135,52 @@ public class Store {
         while(totalAmount > 0) {
             double payment;
             while (true) {
-                    System.out.print("please provide payment amount: ");
-                    if (scanner.hasNextDouble()) {
-                        payment = scanner.nextDouble();
-                        scanner.nextLine();
-                        break;
-                    } else {
-                        System.out.println("Invalid input. Please enter a number.");
-                        scanner.nextLine();
-                    }
-                }
-            double change = payment - totalAmount;
-                if (change < 0) {
-                    System.out.println("Not enough please try again");
+                System.out.print("please provide payment amount: ");
+                if (scanner.hasNextDouble()) {
+                    payment = scanner.nextDouble();
+                    scanner.nextLine();
+                    break;
                 } else {
-                    Receipt receipt = new Receipt(cart, totalAmount, payment, change);
-                    try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true));
-                        writer.write("\n\n****RECEIPT****\n");
-                        System.out.println("\n****RECEIPT****");
-                        for (Product product : cart) {
-                            writer.write(product + "\n");
-                            System.out.println(product);
-                        }
-                        writer.write(String.valueOf(receipt));
-                        System.out.println(receipt);
-                        writer.close();
-                    } catch (Exception e){
-                        System.out.println("failed to add transaction");
-                    }
-                    totalAmount = 0;
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine();
                 }
+            }
+            double change = payment - totalAmount;
+            if (change < 0) {
+                System.out.println("Not enough please try again");
+            } else {
+                Receipt receipt = new Receipt(cart, totalAmount, payment, change);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String dateTime = LocalDateTime.now().format(formatter);
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true))) {
+
+                    writer.write("\n\n****RECEIPT****\n");
+                    writer.write(dateTime + "\n");
+
+                    System.out.println("****RECEIPT****");
+                    System.out.println(dateTime);
+
+                    for (Product product : cart) {
+                        writer.write(product.toString());
+                        writer.newLine();
+
+                        System.out.println(product);
+                    }
+
+                    writer.write(receipt.toString());
+                    writer.newLine();
+                    writer.close();
+
+                    System.out.println(receipt);
+
+                } catch (Exception e) {
+                    System.out.println("failed to add transaction");
+                }
+            }
+            totalAmount =0;
         }
-        cart.clear();
-    }
+        }
 
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         Product item = null;

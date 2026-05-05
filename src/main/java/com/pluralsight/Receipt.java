@@ -34,8 +34,8 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return String.format("\nCart Total : $%,.2f\nTax        : $0:00\n-----------------------------\nTotal Due  : $" + total + "\n" +
+        return String.format("\nCart Total : $%,.2f\nTax        : $0:00\n-----------------------------\nTotal Due  : $%.2f" + "\n" +
                 "Payment    : $%,.2f\nChange     : $%,.2f\n=============================\nBalance    : $0.00" +
-                "\nThank you for your purchase!", total, payment, change);
+                "\nThank you for your purchase!", total, total, payment, change);
     }
 }
