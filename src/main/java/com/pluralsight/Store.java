@@ -17,11 +17,12 @@ public class Store {
 
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
-        while (choice != 3) {
+        while (choice != 4) {
             System.out.println("\nWelcome to the Online Store!");
             System.out.println("1. Show Products");
             System.out.println("2. Show Cart");
-            System.out.println("3. Exit");
+            System.out.println("3. (STAFF ONLY) Load Transactions");
+            System.out.println("4. Exit");
             System.out.print("Your choice: ");
 
             if (!scanner.hasNextInt()) {
@@ -35,7 +36,8 @@ public class Store {
             switch (choice) {
                 case 1 -> displayProducts(inventory, cart, scanner); //shows store inventory and allows users to add items to cart
                 case 2 -> displayCart(cart, scanner); //displays contents of cart and gives user option to check out
-                case 3 -> System.out.println("Thank you for shopping with us!");
+                case 3 -> employeePinCheck(scanner); //check all transaction receipt saved
+                case 4 -> System.out.println("Thank you for shopping with us!");
                 default -> System.out.println("Invalid choice!");
             }
         }
@@ -176,6 +178,30 @@ public class Store {
             System.out.println("No Matching Items Please Try Again");
         }
         return item;
+    }
+
+    public static void loadReceipts(){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("Transactions.csv"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            reader.close();
+        } catch (Exception a) {
+            System.out.println("Sorry something went wrong");
+            }
+    }
+
+    public static void employeePinCheck(Scanner scanner){
+        System.out.print("Please enter employee pin(Raymond its 1234): ");
+        int input = scanner.nextInt();
+        scanner.nextLine();
+        if(input == 1234){
+            loadReceipts();
+        } else {
+            System.out.println("Invalid pin");
+        }
     }
 }
     
