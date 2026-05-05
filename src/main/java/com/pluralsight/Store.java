@@ -144,10 +144,16 @@ public class Store {
                     System.out.println("Not enough please try again");
                 } else {
                     Receipt receipt = new Receipt(cart, totalAmount, payment, change);
-                    System.out.print(receipt);
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true));
+                        writer.write("\n\n****RECEIPT****\n");
+                        System.out.println("\n****RECEIPT****");
+                        for (Product product : cart) {
+                            writer.write(product + "\n");
+                            System.out.println(product);
+                        }
                         writer.write(String.valueOf(receipt));
+                        System.out.println(receipt);
                         writer.close();
                     } catch (Exception e){
                         System.out.println("failed to add transaction");
