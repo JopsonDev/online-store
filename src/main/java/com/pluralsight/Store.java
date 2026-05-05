@@ -131,56 +131,66 @@ public class Store {
         }
     }
 
-    public static void checkOut(ArrayList<Product> cart, double totalAmount, Scanner scanner) {
-        while(totalAmount > 0) {
-            double payment;
-            while (true) {
-                System.out.print("please provide payment amount: ");
-                if (scanner.hasNextDouble()) {
-                    payment = scanner.nextDouble();
-                    scanner.nextLine();
-                    break;
-                } else {
-                    System.out.println("Invalid input. Please enter a number.");
-                    scanner.nextLine();
-                }
-            }
-            double change = payment - totalAmount;
-            if (change < 0) {
-                System.out.println("Not enough please try again");
+    public static double collectingPayment(Scanner scanner, double totalAmount){
+        double payment;
+        while (true) {
+            System.out.printf("Total Due: %,.2f%n", totalAmount);
+            System.out.print("please provide payment amount: ");
+            if (scanner.hasNextDouble()) {
+                payment = scanner.nextDouble();
+                scanner.nextLine();
+                break;
             } else {
-                Receipt receipt = new Receipt(cart, totalAmount, payment, change);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String dateTime = LocalDateTime.now().format(formatter);
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+            }
+        }
+        return payment;
+    }
 
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true))) {
-
-                    writer.write("\n\n****RECEIPT****\n");
-                    writer.write(dateTime + "\n");
-
-                    System.out.println("****RECEIPT****");
-                    System.out.println(dateTime);
-
-                    for (Product product : cart) {
-                        writer.write(product.toString());
-                        writer.newLine();
-
-                        System.out.println(product);
-                    }
-
-                    writer.write(receipt.toString());
-                    writer.newLine();
-                    writer.close();
-
-                    System.out.println(receipt);
-
-                } catch (Exception e) {
-                    System.out.println("failed to add transaction");
+    public static void checkOut(ArrayList<Product> cart, double totalAmount, Scanner scanner) {
+        while (totalAmount > 0) {
+            double payment = 0;
+            double change = 0;
+            while (payment < totalAmount) {
+                payment = collectingPayment(scanner, totalAmount);
+                change = payment - totalAmount;
+                if (change < 0) {
+                    System.out.println("Not enough please try again");
                 }
             }
-            totalAmount =0;
+            Receipt receipt = new Receipt(cart, totalAmount, payment, change);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String dateTime = LocalDateTime.now().format(formatter);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Transactions.csv", true))) {
+
+                writer.write("\n\n****RECEIPT****\n");
+                writer.write(dateTime + "\n");
+
+                System.out.println("****RECEIPT****");
+                System.out.println(dateTime);
+
+                for (Product product : cart) {
+                    writer.write(product.toString());
+                    writer.newLine();
+
+                    System.out.println(product);
+                }
+
+                writer.write(receipt.toString());
+                writer.newLine();
+                writer.close();
+
+                System.out.println(receipt);
+
+            } catch (Exception e) {
+                System.out.println("failed to add transaction");
+            }
+            totalAmount = 0;
         }
         }
+
 
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         Product item = null;
