@@ -2,6 +2,8 @@
 package com.pluralsight;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -235,6 +237,8 @@ public class Store {
             File folder = new File("Receipts");
             File[] files = folder.listFiles();
 
+            System.out.println("\n  Saved Transactions");
+            System.out.println("=======================");
             if (files != null) {
                 for (File file : files) {
                     System.out.println(file.getName());
@@ -242,7 +246,7 @@ public class Store {
                 System.out.println("Please enter a file to view(yyyy-MM-dd_hh-mm-ss.csv) or X to return: ");
                 String input = scanner.nextLine();
                 if (!input.equalsIgnoreCase("X")) {
-                    reader(input);
+                    reader("Receipts/" + input);
                 } else {
                     break;
                 }
