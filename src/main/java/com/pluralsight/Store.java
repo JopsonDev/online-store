@@ -38,8 +38,7 @@ public class Store {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 ->
-                        displayProducts(inventory, cart, scanner); //shows store inventory and allows users to add items to cart
+                case 1 -> displayProducts(inventory, cart, scanner); //shows store inventory and allows users to add items to cart
                 case 2 -> displayCart(cart, scanner); //displays contents of cart and gives user option to check out
                 case 3 -> employeePinCheck(scanner); //check all transaction receipt saved
                 case 4 -> System.out.println("Thank you for shopping with us!");
@@ -48,7 +47,7 @@ public class Store {
         }
         scanner.close();
     }
-
+    //Reads products file and loads into inventory array
     public static void loadInventory(String fileName, ArrayList<Product> inventory) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -69,6 +68,7 @@ public class Store {
         }
     }
 
+    //adds products to cart array
     public static void addToCart(Product item, Scanner scanner, ArrayList<Product> cart) {
         System.out.println(item + "\n");
         System.out.println("Add to cart (Y/N)");
@@ -83,6 +83,7 @@ public class Store {
         }
     }
 
+    //Allows user to search through products and chose whether they want to add to cart or not
     public static void lookingAtProducts(ArrayList<Product> inventory, Scanner scanner, ArrayList<Product> cart) {
         Product item = null;
         boolean isDone = false;
@@ -107,6 +108,7 @@ public class Store {
         }
     }
 
+    //Shows alls the products available for the user to purchase
     public static void displayProducts(ArrayList<Product> inventory, ArrayList<Product> cart, Scanner scanner) {
         for (Product item : inventory) {
             System.out.println(item);
@@ -115,6 +117,7 @@ public class Store {
         lookingAtProducts(inventory, scanner, cart);
     }
 
+    //Shows everything in users cart and gives them the option to check out
     public static void displayCart(ArrayList<Product> cart, Scanner scanner) {
         double total = 0;
         for (Product product : cart) {
@@ -132,6 +135,7 @@ public class Store {
         }
     }
 
+    //ask for payment from user and returns amount
     public static double collectingPayment(Scanner scanner, double totalAmount) {
         double payment;
         while (true) {
@@ -149,6 +153,7 @@ public class Store {
         return payment;
     }
 
+    //makes the receipt, saves it to a file, displays for user
     public static void receiptBuilder(ArrayList<Product> cart, double totalAmount, double payment, double change) {
         Receipt receipt = new Receipt(cart, totalAmount, payment, change);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
@@ -185,6 +190,7 @@ public class Store {
         }
     }
 
+    //uses collectingPayment and receiptBuilder method, Makes sure full balance is takin care of
     public static void checkOut(ArrayList<Product> cart, double totalAmount, Scanner scanner) {
         while (totalAmount > 0) {
 
@@ -205,6 +211,7 @@ public class Store {
         }
     }
 
+    //checks user ID enter through lookingAtProducts and sees if any products match
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         Product item = null;
         for (Product product : inventory) {
@@ -219,6 +226,7 @@ public class Store {
         return item;
     }
 
+    //reads and prints given file
     public static void reader(String fileName) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -232,6 +240,7 @@ public class Store {
         }
     }
 
+    //shows all transaction saved in the receipts folder than allows user to pick one and view it
     public static void loadReceipts(Scanner scanner) {
         while (true) {
             File folder = new File("Receipts");
@@ -253,6 +262,8 @@ public class Store {
             }
         }
     }
+
+    //takes a pin to move on to next screen to stop unauthorized users from seeing
     public static void employeePinCheck(Scanner scanner) {
         System.out.print("Please enter employee pin(Raymond its 1234): ");
         int input = scanner.nextInt();

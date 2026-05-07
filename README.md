@@ -41,19 +41,16 @@ The intended users are customers who want to browse products and make a purchase
 ## Demo
 
 ### Application Screenshot
-Add a screenshot or GIF here showing:
-- The main menu
-- The product list
-- The cart
-- The checkout receipt
-
+![Screenshot 2026-05-07 113852.png](../../../../Pictures/Screenshots/Screenshot%202026-05-07%20113852.png)
+![Screenshot 2026-05-07 113915.png](../../../../Pictures/Screenshots/Screenshot%202026-05-07%20113915.png)
+![Screenshot 2026-05-07 113957.png](../../../../Pictures/Screenshots/Screenshot%202026-05-07%20113957.png)
 ## Future Work
 
 - Add the ability to remove items from the cart.
 - Add product categories.
 - Improve error handling for missing or incorrectly formatted CSV files.
 - Allow users to search products by name.
-- Save receipts to a file.
+
 
 ## Resources
 
@@ -64,8 +61,7 @@ Add a screenshot or GIF here showing:
 
 ## Team Members
 
-- Mason Jopson - Developed the store menu, product display, cart system, checkout process, and payment logic.
-
+- Mason Jopson: Creator
 ## Thanks
 
 Thank you to my instructors and classmates for their support and guidance.

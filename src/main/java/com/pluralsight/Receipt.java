@@ -8,6 +8,7 @@ public class Receipt {
     private double change;
     private ArrayList cart;
 
+    //builds receipts for easy building to store for records
 
     public Receipt(ArrayList cart, double total, double payment, double change) {
         this.cart = cart;
